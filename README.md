@@ -58,34 +58,55 @@ The resolution of the shadow map is now 2048 x 2048.
 
 ### HBAO (Horizontal-Based Ambient Occulusion)
 
-| HBAO Off | HBAO On |
-| --- | --- |
-| ![](imgs/HBAO_off.png) | ![](imgs/HBAO_on.png) |
+| HBAO Off |
+| --- |
+| ![](imgs/HBAO_off.png) |
+
+| HBAO On |
+| --- |
+| ![](imgs/HBAO_on.png) |
 
 
 ### Depth of Field
 
-| Iteration : 4 | Iteration : 16 |
-| --- | --- |
-| ![](imgs/dof_4.png) | ![](imgs/dof_16.png) |
+| Iteration : 4 |
+| --- |
+| ![](imgs/dof_4.png) |
 
-| Focal Distance : 35 | Focal Distance : 325 |
-| --- | --- |
-| ![](imgs/dof_16.png) | ![](imgs/focal_325.png) |
+| Iteration : 16 |
+| --- |
+| ![](imgs/dof_16.png) |
+
+
+| Focal Distance : 35 |
+| --- |
+| ![](imgs/dof_16.png) |
+
+| Focal Distance : 325 |
+| --- |
+| ![](imgs/focal_325.png) |
 
 
 ### Bloom
 
-| Bloom Off | Bloom On |
-| --- | --- |
-| ![](imgs/bloom_off.png) | ![](imgs/bloom_on.png) |
+| Bloom Off |
+| --- |
+| ![](imgs/bloom_off.png) |
+
+| Bloom On |
+| --- |
+| ![](imgs/bloom_on.png) |
 
 
 ### Lens Flare
 
-| Lens Flare Off | Lens Flare On |
-| --- | --- |
-| ![](imgs/LF_Off.png) | ![](imgs/LF_On.png) |
+| Lens Flare Off |
+| --- |
+| ![](imgs/LF_Off.png) |
+
+| Lens Flare On |
+| --- |
+| ![](imgs/LF_On.png) |
 
 
 ### Tone Mapping
