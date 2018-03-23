@@ -3783,7 +3783,7 @@ const controls = {
     Lens_Intensity: 0.1,
     Lens_Ghost: 2,
     Lens_Dispersal: 0.5,
-    Lens_Distortion: 27.0,
+    Lens_Distortion: 65.0,
 };
 let square;
 let particleSquare;
