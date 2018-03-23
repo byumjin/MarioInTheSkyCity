@@ -68,7 +68,9 @@ The resolution of the shadow map is now 2048 x 2048.
 | Iteration : 4 | Iteration : 16 |
 | --- | --- |
 | ![](imgs/dof_4.png) | ![](imgs/dof_16.png) |
+
 | Focal Distance : 35 | Focal Distance : 325 |
+| --- | --- |
 | ![](imgs/dof_16.png) | ![](imgs/focal_325.png) |
 
 
@@ -91,7 +93,9 @@ The resolution of the shadow map is now 2048 x 2048.
 | None | Linear | ReinHard |
 | --- | --- | --- |
 | ![](imgs/tone_none.png) | ![](imgs/tone_linear.png) | ![](imgs/tone_simple.png) |
+
 | Lunar-based ReinHard | White Preserving ReinHard | RomBinDa House |
+| --- | --- | --- |
 | ![](imgs/tone_luma.png) | ![](imgs/tone_white.png) | ![](imgs/tone_house.png) |
 
 
@@ -105,9 +109,13 @@ The resolution of the shadow map is now 2048 x 2048.
 | None | 
 | --- |
 | ![](imgs/none.png) |
+
 | Pointillism | 
+| --- |
 | ![](imgs/pointillism.png) |
-| Oil Painting |
+
+| Oil Painting | 
+| --- |
 | ![](imgs/oil.png) |
 
 
