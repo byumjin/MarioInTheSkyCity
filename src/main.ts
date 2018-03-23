@@ -114,20 +114,20 @@ var timer = {
 }
 
 function loadOBJText() {
-  obj0 = readTextFile('../resources/obj/wahoo.obj');
-  backBuildings = readTextFile('../resources/obj/back_buildings.obj');
-  innerBuildings = readTextFile('../resources/obj/innerBuildings.obj');
-  BoxLamp = readTextFile('../resources/obj/BoxLamp.obj');
-  signs = readTextFile('../resources/obj/signs.obj');
-  trims = readTextFile('../resources/obj/trim_stair.obj');
-  trim_floor = readTextFile('../resources/obj/trim_floor.obj');
-  varanda = readTextFile('../resources/obj/varanda.obj');
-  props = readTextFile('../resources/obj/props.obj');
+  obj0 = readTextFile('./src/resources/obj/wahoo.obj');
+  backBuildings = readTextFile('./src/resources/obj/back_buildings.obj');
+  innerBuildings = readTextFile('./src/resources/obj/innerBuildings.obj');
+  BoxLamp = readTextFile('./src/resources/obj/BoxLamp.obj');
+  signs = readTextFile('./src/resources/obj/signs.obj');
+  trims = readTextFile('./src/resources/obj/trim_stair.obj');
+  trim_floor = readTextFile('./src/resources/obj/trim_floor.obj');
+  varanda = readTextFile('./src/resources/obj/varanda.obj');
+  props = readTextFile('./src/resources/obj/props.obj');
 }
 
 function loadScene() {
 
-  envTexture = new Texture('../resources/textures/nsky.png');
+  envTexture = new Texture('./src/resources/textures/nsky.png');
 
   square && square.destroy();
   mesh0 && mesh0.destroy();
@@ -179,9 +179,9 @@ function loadScene() {
   meshContainer.push(mesh_props);
 
   let tex012 : Array<Texture> = [];
-  tex0 = new Texture('../resources/textures/wahoo_Color.png');
-  tex1 = new Texture('../resources/textures/wahoo_Spec.png');
-  tex2 = new Texture('../resources/textures/wahoo_Norm.png');
+  tex0 = new Texture('./src/resources/textures/wahoo_Color.png');
+  tex1 = new Texture('./src/resources/textures/wahoo_Spec.png');
+  tex2 = new Texture('./src/resources/textures/wahoo_Norm.png');
 
   tex012.push(tex0); tex012.push(tex1); tex012.push(tex2);
 
@@ -189,9 +189,9 @@ function loadScene() {
 
 
   let texbackBuildings : Array<Texture> = [];
-  var texbackBuildings0 = new Texture('../resources/textures/sky_wall_Color.png');
-  var texbackBuildings1 = new Texture('../resources/textures/sky_wall_Spec.png');
-  var texbackBuildings2 = new Texture('../resources/textures/sky_wall_Normal.png');
+  var texbackBuildings0 = new Texture('./src/resources/textures/sky_wall_Color.png');
+  var texbackBuildings1 = new Texture('./src/resources/textures/sky_wall_Spec.png');
+  var texbackBuildings2 = new Texture('./src/resources/textures/sky_wall_Normal.png');
 
   texbackBuildings.push(texbackBuildings0); texbackBuildings.push(texbackBuildings1); texbackBuildings.push(texbackBuildings2);
 
@@ -200,36 +200,36 @@ function loadScene() {
 
   //mesh_BoxLamp
   let texBoxLamp : Array<Texture> = [];
-  var texBoxLamp0 = new Texture('../resources/textures/sky__props_Color.png');
-  var texBoxLamp1 = new Texture('../resources/textures/sky__props_Spec.png');
-  var texBoxLamp2 = new Texture('../resources/textures/sky__props_Normal.png');
+  var texBoxLamp0 = new Texture('./src/resources/textures/sky__props_Color.png');
+  var texBoxLamp1 = new Texture('./src/resources/textures/sky__props_Spec.png');
+  var texBoxLamp2 = new Texture('./src/resources/textures/sky__props_Normal.png');
 
   texBoxLamp.push(texBoxLamp0); texBoxLamp.push(texBoxLamp1); texBoxLamp.push(texBoxLamp2);
   textureContainers.push(texBoxLamp);
 
   //mesh_signs
   let texSigns : Array<Texture> = [];
-  var texSigns0 = new Texture('../resources/textures/Ads.png');
-  var texSigns1 = new Texture('../resources/textures/Ads.png');
-  var texSigns2 = new Texture('../resources/textures/normal.png');
+  var texSigns0 = new Texture('./src/resources/textures/Ads.png');
+  var texSigns1 = new Texture('./src/resources/textures/Ads.png');
+  var texSigns2 = new Texture('./src/resources/textures/normal.png');
 
   texSigns.push(texSigns0); texSigns.push(texSigns1); texSigns.push(texSigns2);
   textureContainers.push(texSigns);
 
   //mesh_trims
   let texTrims : Array<Texture> = [];
-  var texTrims0 = new Texture('../resources/textures/sky__trims_Color.png');
-  var texTrims1 = new Texture('../resources/textures/sky__trims_Spec.png');
-  var texTrims2 = new Texture('../resources/textures/sky__trims_Normal.png');
+  var texTrims0 = new Texture('./src/resources/textures/sky__trims_Color.png');
+  var texTrims1 = new Texture('./src/resources/textures/sky__trims_Spec.png');
+  var texTrims2 = new Texture('./src/resources/textures/sky__trims_Normal.png');
 
   texTrims.push(texTrims0); texTrims.push(texTrims1); texTrims.push(texTrims2);
   textureContainers.push(texTrims);
 
   //mesh_trim_floor
   let texTrimsFloor : Array<Texture> = [];
-  var texTrimsFloor0 = new Texture('../resources/textures/low_sky_tiles_Color.png');
-  var texTrimsFloor1 = new Texture('../resources/textures/low_sky_tiles_Spec.png');
-  var texTrimsFloor2 = new Texture('../resources/textures/low_sky_tiles_Normal.png');
+  var texTrimsFloor0 = new Texture('./src/resources/textures/low_sky_tiles_Color.png');
+  var texTrimsFloor1 = new Texture('./src/resources/textures/low_sky_tiles_Spec.png');
+  var texTrimsFloor2 = new Texture('./src/resources/textures/low_sky_tiles_Normal.png');
 
   texTrimsFloor.push(texTrimsFloor0); texTrimsFloor.push(texTrimsFloor1); texTrimsFloor.push(texTrimsFloor2);
   textureContainers.push(texTrimsFloor);
