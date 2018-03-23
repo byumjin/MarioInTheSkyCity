@@ -52,7 +52,7 @@ Artistic_Effect
 ### Standard Shadow Mapping
 
 I've used standard shadow mapping (as known as depthmap shadow).
-Due to the size of my scene, it needed to use a huge resolution of the shadow map (like 4096 x 4096), for the performance of the other post-process effects, I could not do it.
+Due to the volume of my scene, it needed to use a huge resolution of the shadow map (like 4096 x 4096), for the performance of the other post-process effects, I could not do it.
 The resolution of the shadow map is now 2048 x 2048.
 P.S this low resolution makes looking better when the oil painting option is turned on.
 
