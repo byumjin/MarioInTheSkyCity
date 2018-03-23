@@ -54,14 +54,17 @@ vec4 getLensFlare()
 
  
   // sample halo:
+  /*
   float uHaloWidth = 0.5;
   vec2 haloVec = normalize(ghostVec) * uHaloWidth;
   float weight = length(vec2(0.5, 0.5) - fract(texcoord + haloVec)) / length(vec2(0.5, 0.5));
   
   weight = pow(1.0 - clamp(weight, 0.0, 1.0), 20.0);
   result = textureDistorted(u_frame2, texcoord + haloVec, direction.xy, distortion) *weight;
+  */
+
   result += ghost;
-  result *= 5.0;
+  result *= 3.0;
   
   
 

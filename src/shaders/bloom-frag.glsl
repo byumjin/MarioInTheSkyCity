@@ -11,7 +11,7 @@ uniform vec2 u_screenSize;
 
 void main()
 {	
-	vec4 uScale = vec4(2.5);
+	vec4 uScale = vec4(1.5);
 	vec4 uBias = vec4(-1.2);
 	vec4 sceneColor = texture(u_frame, vec2(fs_UV.x, 1.0 - fs_UV.y));
 
