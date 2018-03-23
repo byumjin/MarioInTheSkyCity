@@ -283,7 +283,7 @@ function main() {
 
   var TONEMAPPING = HDR.addFolder('Tone Mapping');
   TONEMAPPING.add(controls, 'ToneMapping');
-  TONEMAPPING.add(controls, 'ToneClass', { None: 0, Linear: 1, SimpleReinhard: 2, lumaBased : 3, white : 4, RomBinDaHouse : 5, filmic : 6, Uncharted2 : 7 });
+  TONEMAPPING.add(controls, 'ToneClass', { None: 0, Linear: 1, SimpleReinhard: 2, lumaBased : 3, white : 4, RomBinDaHouse : 5, filmic : 6});
   TONEMAPPING.add(controls, 'Temperature', 0.0, 10000.0).step(10.0);
 
   var HBAO = gui.addFolder('HBAO');  
@@ -295,9 +295,10 @@ function main() {
 
   HDR.close();
 
-  gui.add(controls, 'Artistic_Effect', { None: 0, Pointilism: 1, Oil_Painting: 2});
+  var ART = gui.addFolder('Artistic Effect'); 
+  ART.add(controls, 'Artistic_Effect', { None: 0, Pointilism: 1, Oil_Painting: 2});
 
-  gui.close();
+  gui.open();
   
   // get canvas and webgl context
   const canvas = <HTMLCanvasElement> document.getElementById('canvas');
