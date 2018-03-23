@@ -36,8 +36,8 @@ const controls = {
   LensFlare : true,
   Lens_Intensity : 0.1,
   Lens_Ghost : 2,
-  Lens_Dispersal : 0.5,
-  Lens_Distortion : 65.0,
+  Lens_Dispersal : 2.0,
+  Lens_Distortion : 40.0,
   
 };
 
@@ -278,7 +278,7 @@ function main() {
   LENSFLARE.add(controls, 'LensFlare');
   LENSFLARE.add(controls, 'Lens_Intensity', 0.0, 5.0).step(0.1);
   LENSFLARE.add(controls, 'Lens_Ghost', 0.0, 8.0).step(1);
-  LENSFLARE.add(controls, 'Lens_Dispersal', 0.0, 2.0).step(0.01);
+  LENSFLARE.add(controls, 'Lens_Dispersal', 0.0, 2.0).step(0.1);
   LENSFLARE.add(controls, 'Lens_Distortion', 0.0, 200.0).step(0.1);
 
   var TONEMAPPING = HDR.addFolder('Tone Mapping');

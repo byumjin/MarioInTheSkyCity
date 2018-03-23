@@ -27,8 +27,6 @@ vec4 textureDistorted(sampler2D tex, vec2 texcoord, vec2 direction, vec3 distort
 vec4 getLensFlare()
 {
 
-
-
   vec2 texcoord = fs_UV;
   texcoord.y = 1.0 - texcoord.y;
 
@@ -62,9 +60,10 @@ vec4 getLensFlare()
   
   weight = pow(1.0 - clamp(weight, 0.0, 1.0), 20.0);
   result = textureDistorted(u_frame2, texcoord + haloVec, direction.xy, distortion) *weight;
+  result += ghost;
   result *= 5.0;
   
-  result += ghost;
+  
 
   return result * u_LightDir.w;
 }
