@@ -3844,18 +3844,18 @@ var timer = {
     },
 };
 function loadOBJText() {
-    obj0 = Object(__WEBPACK_IMPORTED_MODULE_6__globals__["d" /* readTextFile */])('../resources/obj/wahoo.obj');
-    backBuildings = Object(__WEBPACK_IMPORTED_MODULE_6__globals__["d" /* readTextFile */])('../resources/obj/back_buildings.obj');
-    innerBuildings = Object(__WEBPACK_IMPORTED_MODULE_6__globals__["d" /* readTextFile */])('../resources/obj/innerBuildings.obj');
-    BoxLamp = Object(__WEBPACK_IMPORTED_MODULE_6__globals__["d" /* readTextFile */])('../resources/obj/BoxLamp.obj');
-    signs = Object(__WEBPACK_IMPORTED_MODULE_6__globals__["d" /* readTextFile */])('../resources/obj/signs.obj');
-    trims = Object(__WEBPACK_IMPORTED_MODULE_6__globals__["d" /* readTextFile */])('../resources/obj/trim_stair.obj');
-    trim_floor = Object(__WEBPACK_IMPORTED_MODULE_6__globals__["d" /* readTextFile */])('../resources/obj/trim_floor.obj');
-    varanda = Object(__WEBPACK_IMPORTED_MODULE_6__globals__["d" /* readTextFile */])('../resources/obj/varanda.obj');
-    props = Object(__WEBPACK_IMPORTED_MODULE_6__globals__["d" /* readTextFile */])('../resources/obj/props.obj');
+    obj0 = Object(__WEBPACK_IMPORTED_MODULE_6__globals__["d" /* readTextFile */])('./src/resources/obj/wahoo.obj');
+    backBuildings = Object(__WEBPACK_IMPORTED_MODULE_6__globals__["d" /* readTextFile */])('./src/resources/obj/back_buildings.obj');
+    innerBuildings = Object(__WEBPACK_IMPORTED_MODULE_6__globals__["d" /* readTextFile */])('./src/resources/obj/innerBuildings.obj');
+    BoxLamp = Object(__WEBPACK_IMPORTED_MODULE_6__globals__["d" /* readTextFile */])('./src/resources/obj/BoxLamp.obj');
+    signs = Object(__WEBPACK_IMPORTED_MODULE_6__globals__["d" /* readTextFile */])('./src/resources/obj/signs.obj');
+    trims = Object(__WEBPACK_IMPORTED_MODULE_6__globals__["d" /* readTextFile */])('./src/resources/obj/trim_stair.obj');
+    trim_floor = Object(__WEBPACK_IMPORTED_MODULE_6__globals__["d" /* readTextFile */])('./src/resources/obj/trim_floor.obj');
+    varanda = Object(__WEBPACK_IMPORTED_MODULE_6__globals__["d" /* readTextFile */])('./src/resources/obj/varanda.obj');
+    props = Object(__WEBPACK_IMPORTED_MODULE_6__globals__["d" /* readTextFile */])('./src/resources/obj/props.obj');
 }
 function loadScene() {
-    envTexture = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('../resources/textures/nsky.png');
+    envTexture = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('./src/resources/textures/nsky.png');
     square && square.destroy();
     mesh0 && mesh0.destroy();
     mesh_backBuildings && mesh_backBuildings.destroy();
@@ -3894,17 +3894,17 @@ function loadScene() {
     meshContainer.push(mesh_varanda);
     meshContainer.push(mesh_props);
     let tex012 = [];
-    tex0 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('../resources/textures/wahoo_Color.png');
-    tex1 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('../resources/textures/wahoo_Spec.png');
-    tex2 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('../resources/textures/wahoo_Norm.png');
+    tex0 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('./src/resources/textures/wahoo_Color.png');
+    tex1 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('./src/resources/textures/wahoo_Spec.png');
+    tex2 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('./src/resources/textures/wahoo_Norm.png');
     tex012.push(tex0);
     tex012.push(tex1);
     tex012.push(tex2);
     textureContainers.push(tex012);
     let texbackBuildings = [];
-    var texbackBuildings0 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('../resources/textures/sky_wall_Color.png');
-    var texbackBuildings1 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('../resources/textures/sky_wall_Spec.png');
-    var texbackBuildings2 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('../resources/textures/sky_wall_Normal.png');
+    var texbackBuildings0 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('./src/resources/textures/sky_wall_Color.png');
+    var texbackBuildings1 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('./src/resources/textures/sky_wall_Spec.png');
+    var texbackBuildings2 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('./src/resources/textures/sky_wall_Normal.png');
     texbackBuildings.push(texbackBuildings0);
     texbackBuildings.push(texbackBuildings1);
     texbackBuildings.push(texbackBuildings2);
@@ -3912,36 +3912,36 @@ function loadScene() {
     textureContainers.push(texbackBuildings);
     //mesh_BoxLamp
     let texBoxLamp = [];
-    var texBoxLamp0 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('../resources/textures/sky__props_Color.png');
-    var texBoxLamp1 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('../resources/textures/sky__props_Spec.png');
-    var texBoxLamp2 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('../resources/textures/sky__props_Normal.png');
+    var texBoxLamp0 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('./src/resources/textures/sky__props_Color.png');
+    var texBoxLamp1 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('./src/resources/textures/sky__props_Spec.png');
+    var texBoxLamp2 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('./src/resources/textures/sky__props_Normal.png');
     texBoxLamp.push(texBoxLamp0);
     texBoxLamp.push(texBoxLamp1);
     texBoxLamp.push(texBoxLamp2);
     textureContainers.push(texBoxLamp);
     //mesh_signs
     let texSigns = [];
-    var texSigns0 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('../resources/textures/Ads.png');
-    var texSigns1 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('../resources/textures/Ads.png');
-    var texSigns2 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('../resources/textures/normal.png');
+    var texSigns0 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('./src/resources/textures/Ads.png');
+    var texSigns1 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('./src/resources/textures/Ads.png');
+    var texSigns2 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('./src/resources/textures/normal.png');
     texSigns.push(texSigns0);
     texSigns.push(texSigns1);
     texSigns.push(texSigns2);
     textureContainers.push(texSigns);
     //mesh_trims
     let texTrims = [];
-    var texTrims0 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('../resources/textures/sky__trims_Color.png');
-    var texTrims1 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('../resources/textures/sky__trims_Spec.png');
-    var texTrims2 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('../resources/textures/sky__trims_Normal.png');
+    var texTrims0 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('./src/resources/textures/sky__trims_Color.png');
+    var texTrims1 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('./src/resources/textures/sky__trims_Spec.png');
+    var texTrims2 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('./src/resources/textures/sky__trims_Normal.png');
     texTrims.push(texTrims0);
     texTrims.push(texTrims1);
     texTrims.push(texTrims2);
     textureContainers.push(texTrims);
     //mesh_trim_floor
     let texTrimsFloor = [];
-    var texTrimsFloor0 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('../resources/textures/low_sky_tiles_Color.png');
-    var texTrimsFloor1 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('../resources/textures/low_sky_tiles_Spec.png');
-    var texTrimsFloor2 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('../resources/textures/low_sky_tiles_Normal.png');
+    var texTrimsFloor0 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('./src/resources/textures/low_sky_tiles_Color.png');
+    var texTrimsFloor1 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('./src/resources/textures/low_sky_tiles_Spec.png');
+    var texTrimsFloor2 = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('./src/resources/textures/low_sky_tiles_Normal.png');
     texTrimsFloor.push(texTrimsFloor0);
     texTrimsFloor.push(texTrimsFloor1);
     texTrimsFloor.push(texTrimsFloor2);
