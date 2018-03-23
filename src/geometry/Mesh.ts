@@ -1,4 +1,4 @@
-import {vec3, vec4} from 'gl-matrix';
+import {vec3, vec4, mat4} from 'gl-matrix';
 import Drawable from '../rendering/gl/Drawable';
 import {gl} from '../globals';
 import * as Loader from 'webgl-obj-loader';
@@ -16,6 +16,8 @@ class Mesh extends Drawable {
   constructor(objString: string, center: vec3) {
     super(); // Call the constructor of the super class. This is required.
     this.center = vec4.fromValues(center[0], center[1], center[2], 1);
+
+    mat4.translate(this.modelMat,this.modelMat, vec3.fromValues(center[0], center[1], center[2]) )
 
     this.objString = objString;
   }

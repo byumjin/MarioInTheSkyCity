@@ -1,4 +1,5 @@
 import {gl} from '../../globals';
+import { mat4 } from 'gl-matrix';
 
 abstract class Drawable {
   count: number = 0;
@@ -6,14 +7,20 @@ abstract class Drawable {
   bufIdx: WebGLBuffer;
   bufPos: WebGLBuffer;
   bufNor: WebGLBuffer;
+  bufTranslate: WebGLBuffer;
   bufCol: WebGLBuffer;
   bufUV: WebGLBuffer;
+
+  modelMat : mat4 = mat4.create();
 
   idxBound: boolean = false;
   posBound: boolean = false;
   norBound: boolean = false;
   colBound: boolean = false;
   uvBound: boolean = false;
+  translateGenerated: boolean = false;
+
+  numInstances: number = 0; 
 
   abstract create() : void;
 
@@ -48,6 +55,11 @@ abstract class Drawable {
   generateUV() {
     this.uvBound = true;
     this.bufUV = gl.createBuffer();
+  }
+
+  generateTranslate() {
+    this.translateGenerated = true;
+    this.bufTranslate = gl.createBuffer();
   }
 
   bindIdx(): boolean {
@@ -85,12 +97,23 @@ abstract class Drawable {
     return this.uvBound;
   }
 
+  bindTranslate(): boolean {
+    if (this.translateGenerated) {
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.bufTranslate);
+    }
+    return this.translateGenerated;
+  }
+
   elemCount(): number {
     return this.count;
   }
 
   drawMode(): GLenum {
     return gl.TRIANGLES;
+  }
+
+  setNumInstances(num: number) {
+    this.numInstances = num;
   }
 };
 

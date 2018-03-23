@@ -4,6 +4,9 @@ export function setGL(_gl: WebGL2RenderingContext) {
   gl = _gl;
 }
 
+export var gParticleInfoBufferSize: number = 400;
+export var gShadowMapSize: number = 2048;
+
 export function readTextFile(file: string): string
 {
     var text = "";

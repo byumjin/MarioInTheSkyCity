@@ -1,14 +1,19 @@
 import * as CameraControls from '3d-view-controls';
-import {vec3, mat4} from 'gl-matrix';
+import {vec3, vec4, mat4} from 'gl-matrix';
 
 class Camera {
   controls: any;
   projectionMatrix: mat4 = mat4.create();
+  invProjectionMatrix :  mat4 = mat4.create();
   viewMatrix: mat4 = mat4.create();
+
+  viewProjectionMatrix: mat4 = mat4.create();
+  InvViewProjMatrix: mat4 = mat4.create();
+
   fovy: number = 45 * 3.1415962 / 180.0;
   aspectRatio: number = 1;
   near: number = 0.1;
-  far: number = 100;
+  far: number = 1000;
   position: vec3 = vec3.create();
   direction: vec3 = vec3.create();
   target: vec3 = vec3.create();
@@ -20,6 +25,7 @@ class Camera {
       center: target,
     });
     this.controls.mode = 'turntable';
+    this.controls.zoomSpeed = 3.0;
     vec3.add(this.target, this.position, this.direction);
     mat4.lookAt(this.viewMatrix, this.controls.eye, this.controls.center, this.controls.up);
   }
@@ -30,6 +36,14 @@ class Camera {
 
   updateProjectionMatrix() {
     mat4.perspective(this.projectionMatrix, this.fovy, this.aspectRatio, this.near, this.far);
+
+    //this.projectionMatrix[5] = -this.projectionMatrix[5];
+
+    mat4.invert(this.invProjectionMatrix, this.projectionMatrix);
+
+    mat4.multiply(this.viewProjectionMatrix, this.projectionMatrix, this.viewMatrix );
+    mat4.invert(this.InvViewProjMatrix, this.viewProjectionMatrix );
+
   }
 
   update() {
@@ -37,6 +51,11 @@ class Camera {
 
     vec3.add(this.target, this.position, this.direction);
     mat4.lookAt(this.viewMatrix, this.controls.eye, this.controls.center, this.controls.up);
+
+    this.position = this.controls.eye;
+
+    mat4.multiply(this.viewProjectionMatrix, this.projectionMatrix, this.viewMatrix );
+    mat4.invert(this.InvViewProjMatrix, this.viewProjectionMatrix );
   }
 };
 
