@@ -9,7 +9,7 @@
 
 | Mario in the Sky city! |
 | --- |
-| [![](imgs/main.png)](https://byumjin.github.io/MarioInTheSkyCity/) |
+| [![](imgs/dof_4.png)](https://byumjin.github.io/MarioInTheSkyCity/) |
 
 * [WebGL Link](https://byumjin.github.io/MarioInTheSkyCity/)
 
