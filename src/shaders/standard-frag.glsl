@@ -6,7 +6,7 @@ in vec4 fs_Nor;
 in vec4 fs_Col;
 in vec2 fs_UV;
 
-out vec4 fragColor[3]; // The data in the ith index of this array of outputs
+out vec4 fragColor[4]; // The data in the ith index of this array of outputs
                        // is passed to the ith index of OpenGLRenderer's
                        // gbTargets array, which is an array of textures.
                        // This lets us output different types of data,
@@ -49,6 +49,23 @@ void main() {
 
     fragColor[0] = vec4(Normal_WS.xyz, clamp(POS.z, 0.0, 1.0));    //Normal, Depth
     fragColor[1] = vec4(Specular.xyz, Specular.w);  //Specular, Roughness
-    fragColor[2] = vec4(col.xyz, Albedo.w);      //Albedo, Opacity
-    //fragColor[2] = fs_Pos;      //Albedo, Opacity
+
+    if(fs_Col.w < 0.0) // for moon's texture
+    {        
+        vec3 n = Normal_WS;
+        vec2 uv = vec2(atan(n.x, n.z) / 6.2831853, n.y * 0.5) + 0.5;
+        uv.y = 1.0 - uv.y;
+        fragColor[2] = vec4(texture(tex_Color, uv));      //Albedo, Opacity
+        fragColor[3] = vec4(1.0);
+    }
+    else
+    {
+        fragColor[2] = vec4(col.xyz, Albedo.w);      //Albedo, Opacity
+        fragColor[3] = vec4(0.0); 
+
+    }
+
+  
+    
+    
 }

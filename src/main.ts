@@ -2,6 +2,7 @@ import {vec3, vec4, mat4} from 'gl-matrix';
 import * as Stats from 'stats-js';
 import * as DAT from 'dat-gui';
 import Square from './geometry/Square';
+import Sphere from './geometry/Icosphere';
 import Mesh from './geometry/Mesh';
 import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
 import Camera from './Camera';
@@ -12,9 +13,17 @@ import Texture from './rendering/gl/Texture';
 import {gParticleInfoBufferSize} from './globals';
 import Drawable from './rendering/gl/Drawable';
 import { rename } from 'fs';
+import Icosphere from './geometry/Icosphere';
 
 // Define an object with application parameters and button callbacks
 const controls = {
+
+  Godray : true,
+  Godray_Intensity : 0.1,
+  Godray_Decay : 0.9,
+  Godray_Density : 2.0,
+  Godray_Weight : 1.4,
+  Godray_Iteration : 4,
 
   Bloom : true,
   Bloom_Iteration : 16,
@@ -35,14 +44,15 @@ const controls = {
 
   LensFlare : true,
   Lens_Intensity : 0.1,
-  Lens_Ghost : 2,
-  Lens_Dispersal : 2.0,
-  Lens_Distortion : 40.0,
+  Lens_Ghost : 3,
+  Lens_Dispersal : 1.2,
+  Lens_Distortion : 10.0,
   
 };
 
 let square: Square;
 let particleSquare: Square;
+let moon: Sphere;
 // TODO: replace with your scene's stuff
 
 let meshContainer: Array<Drawable> = [];
@@ -129,6 +139,7 @@ function loadScene() {
 
   envTexture = new Texture('./src/resources/textures/nsky.png');
 
+  moon && moon.destroy();
   square && square.destroy();
   mesh0 && mesh0.destroy();
   mesh_backBuildings && mesh_backBuildings.destroy();
@@ -142,6 +153,8 @@ function loadScene() {
  
   mesh0 = new Mesh(obj0, vec3.fromValues(0, 0, -10));
   mesh0.create();
+
+
 
   mesh_backBuildings = new Mesh(backBuildings, vec3.fromValues(0, 0, 0));
   mesh_backBuildings.create();
@@ -239,6 +252,16 @@ function loadScene() {
 
   //mesh_props
   textureContainers.push(texBoxLamp);
+
+  //moon texture
+  let texMoon : Array<Texture> = [];
+  var texMoon0 = new Texture('./src/resources/textures/moonmap1k.jpg');
+  var texMoon1 = new Texture('./src/resources/textures/low_sky_tiles_Spec.png');
+  var texMoon2 = new Texture('./src/resources/textures/normal.png');
+
+  texMoon.push(texMoon0); texMoon.push(texMoon1); texMoon.push(texMoon2);
+
+  textureContainers.push(texMoon);
 }
 
 function getOrtho(left : number, right : number, top : number, bottom : number, near : number, far : number) : mat4
@@ -265,6 +288,15 @@ function main() {
   const gui = new DAT.GUI();
 
   var HDR = gui.addFolder('HDR');  
+  
+  var GOD = HDR.addFolder('God ray');
+  GOD.add(controls, 'Godray');
+  GOD.add(controls, 'Godray_Intensity', 0.0, 1.0).step(0.01);
+  GOD.add(controls, 'Godray_Decay', 0.0, 2.0).step(0.01);
+  GOD.add(controls, 'Godray_Density', 0.0, 2.0).step(0.01);
+  GOD.add(controls, 'Godray_Weight', 0.0, 4.0).step(0.01);
+  GOD.add(controls ,'Godray_Iteration', 0.0,  32.0).step(1.0);
+
   var DOF = HDR.addFolder('DOF');
   DOF.add(controls, 'DOF');
   DOF.add(controls, 'Focal_Distance', 0.0, 500.0).step(1.0);
@@ -313,7 +345,7 @@ function main() {
   // Initial call to load scene
   loadScene();
 
-  var distance = 100.0;
+  var distance = 150.0;
   //let LightDir : vec4 = vec4.fromValues();
   let lightPos : vec3 =  vec3.fromValues(10.0 , 13.0, 5.0);
   
@@ -333,12 +365,11 @@ function main() {
   //mat4.ortho(orthoMat, -clip + 30.0, clip, -clip + 20.0, clip, 0.1, 1000.0);
   
   let lightViewMat : mat4 = mat4.create();
-
-  
-
   mat4.lookAt(lightViewMat, lightPos, lightFocus, lightUp);
 
-  console.log(lightViewMat);
+  moon = new Icosphere(lightPos, 10.0, 4.0);
+  moon.create();
+
 
   let lightViewProjMat : mat4 = mat4.create();
   mat4.multiply(lightViewProjMat, orthoMat, lightViewMat);  
@@ -379,16 +410,33 @@ function main() {
 
     // TODO: pass any arguments you may need for shader passes
     // forward render mesh info into gbuffers
-    renderer.renderToGBuffer(camera, standardDeferred, meshContainer, textureContainers );
+    renderer.renderToGBuffer(camera, standardDeferred, meshContainer, moon, textureContainers );
 
     //Shadowmap
     renderer.renderShadowMap(camera, standardShadowMapping, lightViewProjMat, meshContainer );
 
+    //Godray
+    
+    renderer.renderGodray(camera, lightPos, vec4.fromValues(controls.Godray_Intensity, controls.Godray_Decay, controls.Godray_Density, controls.Godray_Weight));
+
+    renderer.renderGBlur_Horizontal(camera,  0);
+    renderer.renderGBlur_Vertical(camera);
+
+    if(controls.Godray)
+    {
+      for(var G = 0; G < controls.Godray_Iteration - 1; G++)
+      {
+        renderer.renderGBlur_Horizontal(camera,  1);
+        renderer.renderGBlur_Vertical(camera);
+      }
+    }
+  
+    
+   
+   
    
     // render from gbuffers into 32-bit color buffer
     renderer.renderFromGBuffer(camera, DOFinfo, envTexture.texture, lightViewProjMat, LightColor, LightDir); // 0
-
-   
 
     
     //HBAO
@@ -421,9 +469,7 @@ function main() {
     }
 
      // Lens Flare
-    //renderer.renderLensFlare(camera, lightViewProjMat);
-
-    renderer.renderComposition(camera, controls.DOF, controls.Bloom, controls.HBAO, controls.LensFlare, vec4.fromValues(controls.Lens_Ghost, controls.Lens_Dispersal, controls.Lens_Distortion, controls.Lens_Intensity));
+    renderer.renderComposition(camera, controls.DOF, controls.Bloom, controls.HBAO, controls.LensFlare, controls.Godray, vec4.fromValues(controls.Lens_Ghost, controls.Lens_Dispersal, controls.Lens_Distortion, controls.Lens_Intensity));
 
     //ToneMapping
     renderer.renderPostToneMapping(controls.ToneMapping, controls.ToneClass, controls.Temperature);

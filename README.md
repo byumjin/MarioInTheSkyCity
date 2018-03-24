@@ -19,6 +19,12 @@
 
 ![](imgs/GUI.png)
 
+- God ray
+    - Godray_Intensity : Intensity of god ray effect
+    - Godray_Decay
+    - Godray_Density
+    - Godray_Weight
+    - Godray_Iteration : The number of iteration of the god ray's blur 
 - DOF
     - Focal_Distance : control the focal point focused by main camera.
     - DOF_Iteration : The number of iteration of DOF's blur 
@@ -37,14 +43,14 @@
     - HBAO_Bias : cap the minimum angle for calculating AO
     - HBAO_Max_Length : cap the maximum length of AO comparison between neighbor pixels
     - HBAO_StepSize : Step size for comparison between neighbor pixels
-Artistic_Effect
+- Artistic_Effect
     - Pointillism
     - Oil Painting
 
 
-## Graphics PipeLines
+## Graphics PipeLine
 
-| Graphics Pipelines |
+| Graphics Pipeline |
 | --- |
 | ![](imgs/pipeline.png) |
 
@@ -65,6 +71,15 @@ I've tried to use depth buffer as depth map but i didn't work. :(
 | GGX |
 | --- |
 | ![](imgs/PBS.png) |
+
+
+### God Ray
+
+I've referred to [here](http://fabiensanglard.net/lightScattering/).
+
+| God Ray |
+| --- |
+| ![](imgs/God.png) |
 
 
 ### HBAO (Horizon-Based Ambient Occulusion)
@@ -127,13 +142,13 @@ And, like [alien isolation's bloom effect](https://github.com/CIS-566-2018/homew
 Lens flare refers to a phenomenon wherein light is scattered or flared in a lens system, often in response to a bright light, producing an undesirable effect on the image.
 In order to create this effect, I referred to [John chapman’s Lens flare](http://john-chapman-graphics.blogspot.com/2013/02/pseudo-lens-flare.html) which is not physically-based model. 
 
-| Lens Flare Off |
-| --- |
-| ![](imgs/LF_Off.png) |
+| Lens Flare Off |  Lens Flare On |
+| --- | --- |
+| ![](imgs/LF_Off.png) | ![](imgs/LF_On.png) |
 
-| Lens Flare On |
-| --- |
-| ![](imgs/LF_On.png) |
+| Lens Flare Off |  Lens Flare On |
+| --- | --- |
+| ![](imgs/LF_Off2.png) | ![](imgs/LF_On2.png) |
 
 
 ### Tone Mapping
@@ -177,6 +192,7 @@ I've referred to [Kuwahara filter](https://en.wikipedia.org/wiki/Kuwahara_filter
 
 ## References
 
+- [God Ray](http://fabiensanglard.net/lightScattering/)
 - [HBAO](http://www.nvidia.com/object/siggraph-2008-HBAO.html)
 - [AMD’s advanced DOF](https://developer.amd.com/wordpress/media/2012/10/Scheuermann_DepthOfField.pdf)
 - [John chapman’s Lens flare](http://john-chapman-graphics.blogspot.com/2013/02/pseudo-lens-flare.html)

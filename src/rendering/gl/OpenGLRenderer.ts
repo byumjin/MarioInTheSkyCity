@@ -10,7 +10,9 @@ import Square from '../../geometry/Square';
 import { Texture } from './Texture';
 
 
+
 class OpenGLRenderer {
+  DownSampling_GOD : number = 2.0;
   Horizontal_DOF : number = 2.0;
   Vertical_DOF : number = 2.0;
   Horizontal : number = 4.0;
@@ -62,12 +64,26 @@ class OpenGLRenderer {
     this.post32Passes.push(pass);
   }
 
+  mulMat4Vec4(inMat:mat4, inVec:vec4): vec4
+  {
+    var outVec = vec4.create();
+
+    vec4.fromValues(inMat[0], inMat[4], inMat[8], inMat[12]);
+
+    outVec[0] = inMat[0] * inVec[0] + inMat[4] * inVec[1] + inMat[8] * inVec[2] + inMat[12] * inVec[3];
+    outVec[1] = inMat[1] * inVec[0] + inMat[5] * inVec[1] + inMat[9] * inVec[2] + inMat[13] * inVec[3];
+    outVec[2] = inMat[2] * inVec[0] + inMat[6] * inVec[1] + inMat[10] * inVec[2] + inMat[14] * inVec[3];
+    outVec[3] = inMat[3] * inVec[0] + inMat[7] * inVec[1] + inMat[11] * inVec[2] + inMat[15] * inVec[3];
+
+    return outVec;
+  }
+
 
   constructor(public canvas: HTMLCanvasElement) {
     this.currentTime = 0.0;
-    this.gbTargets = [undefined, undefined, undefined];
-    this.post8Buffers = [undefined, undefined, undefined, undefined];
-    this.post8Targets = [undefined, undefined, undefined, undefined];
+    this.gbTargets = [undefined, undefined, undefined, undefined];
+    this.post8Buffers = [undefined, undefined, undefined, undefined, undefined];
+    this.post8Targets = [undefined, undefined, undefined, undefined, undefined];
     this.post8Passes = [];
 
     this.post32Buffers = [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined];
@@ -75,15 +91,16 @@ class OpenGLRenderer {
     this.post32Passes = [];
 
     // TODO: these are placeholder post shaders, replace them with something good
-    this.add8BitPass(new PostProcess(new Shader(gl.FRAGMENT_SHADER, require('../../shaders/present-frag.glsl')), "present", 0));
+    this.add8BitPass(new PostProcess(new Shader(gl.FRAGMENT_SHADER, require('../../shaders/present-frag.glsl')), "present", 0)); //0
 
-    this.add8BitPass(new PostProcess(new Shader(gl.FRAGMENT_SHADER, require('../../shaders/stateDot-frag.glsl')), "stateDot", 1));
-    this.add8BitPass(new PostProcess(new Shader(gl.FRAGMENT_SHADER, require('../../shaders/point-frag.glsl')), "point", 2));
+    this.add8BitPass(new PostProcess(new Shader(gl.FRAGMENT_SHADER, require('../../shaders/stateDot-frag.glsl')), "stateDot", 1)); //1
+    this.add8BitPass(new PostProcess(new Shader(gl.FRAGMENT_SHADER, require('../../shaders/point-frag.glsl')), "point", 2)); //frame
 
-    this.add8BitPass(new PostProcess(new Shader(gl.FRAGMENT_SHADER, require('../../shaders/examplePost2-frag.glsl')), "oil painting", 0));
+    this.add8BitPass(new PostProcess(new Shader(gl.FRAGMENT_SHADER, require('../../shaders/examplePost2-frag.glsl')), "oil painting", 0)); //frame
 
-
-
+    this.add8BitPass(new PostProcess(new Shader(gl.FRAGMENT_SHADER, require('../../shaders/godray-frag.glsl')), "godray", 0)); //2
+    this.add8BitPass(new PostProcess(new Shader(gl.FRAGMENT_SHADER, require('../../shaders/Blur_H_godray-frag.glsl')), "godrayH", 0)); //3
+    this.add8BitPass(new PostProcess(new Shader(gl.FRAGMENT_SHADER, require('../../shaders/Blur_V_godray-frag.glsl')), "godrayV", 0)); //4
 
     this.add32BitPass(new PostProcess(new Shader(gl.FRAGMENT_SHADER, require('../../shaders/Blur_DOF_Horizontal-frag.glsl')), "DOFblurH", 0));  // 0
     this.add32BitPass(new PostProcess(new Shader(gl.FRAGMENT_SHADER, require('../../shaders/Blur_DOF_Vertical-frag.glsl')), "DOFblurv", 0)); //1
@@ -134,7 +151,7 @@ class OpenGLRenderer {
     // refresh the gbuffers
     this.gBuffer = gl.createFramebuffer();
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.gBuffer);
-    gl.drawBuffers([gl.COLOR_ATTACHMENT0, gl.COLOR_ATTACHMENT1, gl.COLOR_ATTACHMENT2]);
+    gl.drawBuffers([gl.COLOR_ATTACHMENT0, gl.COLOR_ATTACHMENT1, gl.COLOR_ATTACHMENT2, gl.COLOR_ATTACHMENT3]);
 
     for (let i = 0; i < this.gbTargets.length; i ++) {
       this.gbTargets[i] = gl.createTexture();
@@ -143,8 +160,14 @@ class OpenGLRenderer {
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-     
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, gl.drawingBufferWidth, gl.drawingBufferHeight, 0, gl.RGBA, gl.FLOAT, null);
+
+      //God ray
+      if(i == 3)
+      {
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, gl.drawingBufferWidth, gl.drawingBufferHeight, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+      }
+      else
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, gl.drawingBufferWidth, gl.drawingBufferHeight, 0, gl.RGBA, gl.FLOAT, null);
 
       gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0 + i, gl.TEXTURE_2D, this.gbTargets[i], 0);
     }
@@ -184,6 +207,14 @@ class OpenGLRenderer {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, gParticleInfoBufferSize, gParticleInfoBufferSize, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+      }
+      else if(i >= 2 && i <= 4)
+      {
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, gl.drawingBufferWidth / this.DownSampling_GOD, gl.drawingBufferHeight / this.DownSampling_GOD, 0, gl.RGBA, gl.FLOAT, null);
       }
       else
       {
@@ -317,7 +348,7 @@ class OpenGLRenderer {
   }
 
 
-  renderToGBuffer(camera: Camera, gbProg: ShaderProgram, drawables: Array<Drawable>, textures : Array<Array<Texture>>) {
+  renderToGBuffer(camera: Camera, gbProg: ShaderProgram, drawables: Array<Drawable>, moon : Drawable, textures : Array<Array<Texture>>) {
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.gBuffer);
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     //gl.enable(gl.CULL_FACE);
@@ -359,6 +390,21 @@ class OpenGLRenderer {
       gbProg.draw(drawables[i]);
     }
 
+    {
+      gbProg.setModelMatrix(moon.modelMat);
+
+      gbProg.setupTexUnits(["tex_Color"]);
+      gbProg.bindTexToUnit("tex_Color", textures[drawables.length][0], 0);
+
+      gbProg.setupTexUnits(["tex_Specular"]);
+      gbProg.bindTexToUnit("tex_Specular", textures[drawables.length][1], 1);
+
+      gbProg.setupTexUnits(["tex_Normal"]);
+      gbProg.bindTexToUnit("tex_Normal", textures[drawables.length][2], 2);
+
+      gbProg.draw(moon);
+    }
+
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
   }
@@ -381,6 +427,70 @@ class OpenGLRenderer {
     // bind default frame buffer
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     //gl.disable(gl.BLEND);
+  }
+
+  renderGodray(camera: Camera, lightPos : vec3, godrayInfo : vec4 )
+  {
+    //gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, this.post8Buffers[2]);
+    gl.viewport(0, 0, gl.drawingBufferWidth / this.DownSampling_GOD, gl.drawingBufferHeight / this.DownSampling_GOD);
+    gl.disable(gl.DEPTH_TEST);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    var LightPos = this.mulMat4Vec4( camera.viewProjectionMatrix, vec4.fromValues(lightPos[0], lightPos[1], lightPos[2], 1.0));
+    
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, this.gbTargets[3]);
+
+    this.post8Passes[4].setGodrayInfo( godrayInfo ); //x : exposure, y : decay, z : density, w : weight
+    this.post8Passes[4].setLightPos(LightPos);
+    this.post8Passes[4].draw();
+
+    gl.bindTexture(gl.TEXTURE_2D, null);
+
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  }
+
+  renderGBlur_Horizontal(camera: Camera,  index : number) {
+    gl.bindFramebuffer(gl.FRAMEBUFFER, this.post8Buffers[3]);
+
+      gl.viewport(0, 0, gl.drawingBufferWidth / this.DownSampling_GOD, gl.drawingBufferHeight / this.DownSampling_GOD);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+
+      gl.activeTexture(gl.TEXTURE0);
+
+      if(index == 0)
+      {
+          gl.bindTexture(gl.TEXTURE_2D, this.post8Targets[2]); //
+      }
+      else
+      {
+         gl.bindTexture(gl.TEXTURE_2D, this.post8Targets[4]);
+      }
+     
+      this.post8Passes[5].setScreenSize(vec2.fromValues(this.canvas.width/ this.DownSampling_GOD, this.canvas.height/ this.DownSampling_GOD));
+      this.post8Passes[5].draw();
+
+      // bind default frame buffer
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+  }
+
+  renderGBlur_Vertical(camera: Camera) {
+    gl.bindFramebuffer(gl.FRAMEBUFFER, this.post8Buffers[4]);
+    
+      gl.viewport(0, 0, gl.drawingBufferWidth / this.DownSampling_GOD, gl.drawingBufferHeight / this.DownSampling_GOD);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, this.post8Targets[3]);
+
+      this.post8Passes[6].setScreenSize(vec2.fromValues(this.canvas.width / this.DownSampling_GOD, this.canvas.height/ this.DownSampling_GOD));
+      this.post8Passes[6].draw();
+
+      // bind default frame buffer
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
   }
 
   
@@ -462,6 +572,8 @@ class OpenGLRenderer {
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
       //gl.disable(gl.BLEND);
   }
+
+  
 
   renderBlur_Horizontal(camera: Camera, DOF : vec4, index : number, bHBAO : boolean) {
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.post32Buffers[1]);
@@ -605,7 +717,7 @@ class OpenGLRenderer {
       gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
   }
 
-  renderComposition(camera: Camera, DOF : boolean, Bloom : boolean, bHBAO : boolean, bLensFlare : boolean, LensflareInfo : vec4) {
+  renderComposition(camera: Camera, DOF : boolean, Bloom : boolean, bHBAO : boolean, bLensFlare : boolean,  bGod : boolean, LensflareInfo : vec4) {
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.post32Buffers[7]);
   
       gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
@@ -627,8 +739,13 @@ class OpenGLRenderer {
        
       this.post32Passes[6].setLightColor( vec4.fromValues(1.0 / this.canvas.width, 1.0 / this.canvas.height, Bloom ? 1.0 : 0.0, bLensFlare ? 1.0 : 0.0));
       this.post32Passes[6].setLightDir(LensflareInfo);
+      this.post32Passes[6].setTime(bGod ? 1.0 : 0.0);
       this.post32Passes[6].setFrame2(this.post32Targets[6]); // Bloom
-      //this.post32Passes[6].setDepthMap(this.post32Targets[11]); // Lens Flare
+
+     
+      this.post32Passes[6].setDepthMap(this.post8Targets[4]); // Godray
+      
+     
       this.post32Passes[6].draw();
 
       // bind default frame buffer

@@ -167,7 +167,7 @@ class Icosphere extends Drawable {
       this.colors[idx] = Math.random();
       this.colors[idx + 1] = Math.random();
       this.colors[idx + 2] = Math.random();
-      this.colors[idx + 3] = 1.0;
+      this.colors[idx + 3] = -1.0;
     }
     this.uvs = new Float32Array(vertices.length * 2);
     for (let i = 0; i < vertices.length; i++) {

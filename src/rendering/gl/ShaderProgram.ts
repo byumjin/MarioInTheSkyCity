@@ -60,6 +60,9 @@ class ShaderProgram {
   unifLightColor : WebGLUniformLocation;
   unifLightDir : WebGLUniformLocation;
 
+  unifGodrayInfo : WebGLUniformLocation;
+  unifLightPos : WebGLUniformLocation;
+
   constructor(shaders: Array<Shader>) {
     this.prog = gl.createProgram();
 
@@ -106,6 +109,9 @@ class ShaderProgram {
     this.unifTemperature = gl.getUniformLocation(this.prog, "u_Temperature");
     this.unifToneMapping = gl.getUniformLocation(this.prog, "u_ToneMapping");
     this.unifHBAOInfo = gl.getUniformLocation(this.prog, "HBAOinfo");
+
+    this.unifGodrayInfo = gl.getUniformLocation(this.prog, "u_godRayInfo");
+    this.unifLightPos = gl.getUniformLocation(this.prog, "u_lightPos");
     
 
     this.unifTexUnits = new Map<string, WebGLUniformLocation>();
@@ -273,6 +279,22 @@ class ShaderProgram {
   
       gl.activeTexture(gl.TEXTURE3);
       gl.bindTexture(gl.TEXTURE_2D, texture);  
+    }
+  }
+
+  setGodrayInfo(v : vec4)
+  {
+    this.use();
+    if (this.unifGodrayInfo != -1) {
+      gl.uniform4fv(this.unifGodrayInfo, v);
+    }
+  }
+
+  setLightPos(v : vec4)
+  {
+    this.use();
+    if (this.unifLightPos != -1) {
+      gl.uniform4fv(this.unifLightPos, v);
     }
   }
 
