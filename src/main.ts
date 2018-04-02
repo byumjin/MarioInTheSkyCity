@@ -123,6 +123,8 @@ var timer = {
   },
 }
 
+
+
 function loadOBJText() {
   obj0 = readTextFile('./src/resources/obj/wahoo.obj');
   backBuildings = readTextFile('./src/resources/obj/back_buildings.obj');
@@ -274,6 +276,8 @@ function getOrtho(left : number, right : number, top : number, bottom : number, 
 
 function main() {
 
+  
+
   play_single_sound();
 
   // Initial display for framerate
@@ -341,6 +345,7 @@ function main() {
   // `setGL` is a function imported above which sets the value of `gl` in the `globals.ts` module.
   // Later, we can import `gl` from `globals.ts` to access it
   setGL(gl);
+  
 
   // Initial call to load scene
   loadScene();
@@ -380,7 +385,11 @@ function main() {
 
   var LightDir = vec4.fromValues(lightDir[0], lightDir[1], lightDir[2], 0.0);
 
-  const camera = new Camera(vec3.fromValues(0, 9, 5), vec3.fromValues(0, 9, -10));
+  const camera = new Camera();
+  camera.initialize(vec3.fromValues(0,10,3), vec3.fromValues(0,10,0));
+  //initEventHandlers(canvas, camera);
+
+  
 
   const renderer = new OpenGLRenderer(canvas);
   renderer.setClearColor(0, 0, 0, 1);
@@ -397,7 +406,10 @@ function main() {
       ]);
 
   function tick() {
-    camera.update();
+
+    
+
+    camera.update(timer.deltaTime * 0.5);
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     timer.updateTime();
@@ -405,6 +417,7 @@ function main() {
 
     renderer.clear();
     renderer.clearGB();
+    
 
     var DOFinfo = vec4.fromValues(camera.near, controls.Focal_Distance, camera.far * camera.far, camera.far*10.0);
 
@@ -501,6 +514,94 @@ function main() {
     camera.updateProjectionMatrix();
   }, false);
 
+  window.addEventListener('contextmenu', function(ev) {
+    if (ev.button === 2) {
+     ev.preventDefault();
+      return false;
+    }
+}, false);
+
+  window.addEventListener('mousedown', function(ev) {
+    
+    if (ev.button == 0)
+      camera.bLeftClick = true;
+    if (ev.button == 1)
+      camera.bMiddleClick = true;
+    if (ev.button == 2)
+      camera.bRightClick = true;
+
+  }, false);
+
+  window.addEventListener('mousemove', function(ev) {
+    
+    if (ev.button == 0 && camera.bLeftClick)
+    {
+      camera.theta -= ev.movementX;
+      camera.phi -= ev.movementY;
+      camera.updateOrbit()
+    }
+
+  }, false);
+
+  window.addEventListener('mouseup', function(ev) {
+    
+    if (ev.button == 0)
+      camera.bLeftClick = false;
+    if (ev.button == 1)
+      camera.bMiddleClick = false;
+     if (ev.button == 2)
+      camera.bRightClick = false;
+
+  }, false);
+
+  window.addEventListener('keydown', function(ev) {
+    
+    if (ev.keyCode !== undefined) {      
+      
+      if (String.fromCharCode(ev.keyCode) == 'W')
+      {
+        camera.bForward = true;
+      }
+      if (String.fromCharCode(ev.keyCode) == 'A')
+      {
+        camera.bLeft = true;
+      }
+      if (String.fromCharCode(ev.keyCode) == 'S')
+      {
+        camera.bBackward = true;
+      }
+      if (String.fromCharCode(ev.keyCode) == 'D')
+      {
+        camera.bRight = true;
+      }
+    }
+
+  }, false);
+
+  window.addEventListener('keyup', function(ev) {
+    
+    if (ev.keyCode !== undefined) {      
+
+      if (String.fromCharCode(ev.keyCode) == 'W')
+      {
+        camera.bForward = false;
+      }
+      else if (String.fromCharCode(ev.keyCode) == 'A')
+      {
+        camera.bLeft = false;
+      }
+      else if (String.fromCharCode(ev.keyCode) == 'S')
+      {
+        camera.bBackward = false;
+      }
+      else if (String.fromCharCode(ev.keyCode) == 'D')
+      {
+        camera.bRight = false;
+      }
+    }
+
+  }, false);
+
   renderer.setSize(window.innerWidth, window.innerHeight);
   camera.setAspectRatio(window.innerWidth / window.innerHeight);
   camera.updateProjectionMatrix();
@@ -508,6 +609,7 @@ function main() {
   // Start the render loop
   tick();
 }
+
 
 
 function setup() {
