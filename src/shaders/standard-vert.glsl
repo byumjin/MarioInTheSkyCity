@@ -27,7 +27,7 @@ void main()
     // fragment info is in view space
     mat3 invTranspose = mat3(u_ModelInvTr);
     
-    fs_Nor = vec4(invTranspose * vec3(vs_Nor), 0);
+    fs_Nor = vs_Nor;
     fs_Pos = vs_Pos;
     fs_Pos.w = 1.0;
     

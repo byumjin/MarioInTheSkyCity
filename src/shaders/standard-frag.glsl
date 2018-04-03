@@ -18,6 +18,7 @@ uniform sampler2D tex_Specular;
 uniform sampler2D tex_Normal;
 
 uniform mat4 u_Model;
+uniform mat4 u_ModelInvTr;  
 uniform mat4 u_ViewProj;
 
 vec3 applyNormalMap(vec3 geomnor, vec3 normap) {
@@ -42,7 +43,12 @@ void main() {
     vec4 Specular = texture(tex_Specular, flipUV);
     vec4 Normal = texture(tex_Normal, flipUV);
 
-    vec3 Normal_WS = applyNormalMap(fs_Nor.xyz, normalize(Normal.xyz * 2.0 - vec3(1.0)));
+    // fragment info is in view space
+    mat3 invTranspose = mat3(u_ModelInvTr);
+
+    vec4 VertexNormal = vec4(invTranspose * vec3(fs_Nor.xyz), 0);
+
+    vec3 Normal_WS = applyNormalMap(VertexNormal.xyz, normalize(Normal.xyz * 2.0 - vec3(1.0)));
 
     // if using textures, inverse gamma correct
     vec3 col = pow(Albedo.xyz, vec3(2.2));
